@@ -70,19 +70,10 @@ typedef struct s_data
 	struct timeval	start_time;
 	pthread_mutex_t	general_mutex;
 	pthread_cond_t	general_cond;
-	t_queue			*head;
 	t_coder			*coders;
 	t_dongle		*dongles;
-	struct Heap		heap;
+	struct Heap		*heap;
 }	t_data;
-
-typedef struct s_queue
-{
-	t_coder			*coder;
-
-	struct s_queue	*next;
-	struct s_queue	*prev;
-}	t_queue;
 
 //codexion.c
 void	*life_cycle(void *arg);
@@ -112,16 +103,11 @@ void	refactor(t_coder *coder);
 
 //states.c
 void	state_info(char *state, int coder_id, struct timeval start_time);
-int		your_turn(t_queue **head, t_coder *coder, t_data *game);
-bool	first_expire(t_queue **head, t_coder *coder);
+int		your_turn(t_coder *coder, t_data *game);
+t_coder	*first_expire(t_coder *a, t_coder *b);
 long	burnout_calculator(t_coder *coder);
 int		cooldown_check(t_coder *coder);
 
-//queue.c
-void	queue_adding(t_queue **head, t_coder *coder);
-int		already_in(t_queue **head, t_coder *coder);
-void	queue_leaving(t_queue **head, t_coder *coder);
-void	queue_clear(t_queue **head);
 
 //utils.c
 void	*monitor(void *arg);
@@ -136,5 +122,18 @@ struct 	timespec	cooldown_deadline(long wait_time, struct timeval last_release);
 struct 	timespec	later_cooldown(struct timespec left_deadline, struct timespec right_dealine);
 int 	cooldown_check2(struct timespec now, struct timespec dongle);
 void 	waiter(t_coder *coder);
+
+//heap.c
+Heap *createHeap(int capacity, int scheduler);
+void swap(t_coder **a, t_coder **b);
+void heapify(Heap *heap, int i);
+void buildHeap(Heap *heap);
+void insertHeap(Heap *heap, t_coder *coder);
+
+//heap2.c
+int extract_root(Heap *heap);
+void deleteKey(Heap *heap, t_coder *coder);
+int already_in(Heap *heap, t_coder *coder);
+int higher_priority(t_coder *a, t_coder *b);
 
 #endif

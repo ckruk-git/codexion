@@ -7,8 +7,9 @@ SRC = codexion.c \
 		utils.c \
 		utils2.c \
 		states.c \
-		queue.c \
-		time.c
+		time.c \
+		heap.c \
+		heap2.c
 
 OBJ = $(SRC:.c=.o)
 NAME = codexion

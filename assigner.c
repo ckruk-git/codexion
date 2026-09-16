@@ -35,7 +35,6 @@ int	assigner_1(t_data *game, char **argv)
 		return (0);
 	}
 	game->burnout = false;
-	game->head = NULL;
 	coders_assigner(game);
 	return (1);
 }
@@ -84,7 +83,6 @@ void	threads_initializer(t_data *game)
 	i = 0;
 	while (i < game->num_of_coders)
 		pthread_join(game->coders[i++].thread, NULL);
-	pthread_join(monitor_thread, NULL);
 	pthread_join(monitor_thread, NULL);
 }
 

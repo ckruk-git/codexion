@@ -24,6 +24,8 @@ void	*monitor(void *arg)
 			i = 0;
 		pthread_mutex_lock(&game->general_mutex);
 		if (i < game->num_of_coders
+			&& game->coders[i].compile_count
+			< game->num_of_compiles_required
 			&& get_elapsed_time(game->coders[i].last_compile_start)
 			> game->time_to_burnout)
 		{
@@ -72,7 +74,9 @@ void	destroyer(t_data *game)
 {
 	pthread_mutex_destroy(&game->general_mutex);
 	pthread_cond_destroy(&game->general_cond);
-	queue_clear(&game->head);
+	free(game->heap->coder);
+    free(game->heap);
 	free(game->coders);
 	free(game->dongles);
 }
+
